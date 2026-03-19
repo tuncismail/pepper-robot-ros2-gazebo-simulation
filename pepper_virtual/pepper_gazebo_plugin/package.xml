@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>pepper_gazebo_plugin</name>
+  <version>1.0.0</version>
+  <description>Pepper Gazebo simulation plugin for ROS 2</description>
+  <maintainer email="tuncismail@users.noreply.github.com">Ismail Tunc</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>gazebo_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_sensor_msgs</depend>
+  <depend>message_filters</depend>
+  <depend>gazebo_ros</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>pepper_control</depend>
+  <depend>pepper_description</depend>
+  <depend>launch_ros</depend>
+  <depend>sensor_msgs_py</depend>
+  <exec_depend>topic_tools</exec_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

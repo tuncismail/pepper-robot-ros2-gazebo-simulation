@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>pepper_control</name>
+  <version>1.0.0</version>
+  <description>Pepper ros2_control configuration</description>
+  <maintainer email="tuncismail@users.noreply.github.com">Ismail Tunc</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>controller_manager</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

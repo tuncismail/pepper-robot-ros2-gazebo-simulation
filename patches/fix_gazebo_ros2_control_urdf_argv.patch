@@ -1,0 +1,39 @@
+diff --git a/gazebo_ros2_control/src/gazebo_ros2_control_plugin.cpp b/gazebo_ros2_control/src/gazebo_ros2_control_plugin.cpp
+index f9b9990..ff4b6ce 100644
+--- a/gazebo_ros2_control/src/gazebo_ros2_control_plugin.cpp
++++ b/gazebo_ros2_control/src/gazebo_ros2_control_plugin.cpp
+@@ -218,11 +218,9 @@ void GazeboRosControlPlugin::Load(gazebo::physics::ModelPtr parent, sdf::Element
+       impl_->model_nh_->get_logger(), "No parameter file provided. Configuration might be wrong");
+   }
+ 
+-  // set the robot description parameter
+-  // to propagate it among controller manager and controllers
+-  std::string rb_arg = std::string("robot_description:=") + urdf_string;
+-  arguments.push_back(RCL_PARAM_FLAG);
+-  arguments.push_back(rb_arg);
++  // NOTE: robot_description is NOT passed via argv because
++  // rcl_parse_arguments() fails on large URDFs (special chars / length).
++  // It is set via NodeOptions::append_parameter_override() below.
+ 
+   if (sdf->HasElement("ros")) {
+     sdf = sdf->GetElement("ros");
+@@ -375,12 +373,18 @@ void GazeboRosControlPlugin::Load(gazebo::physics::ModelPtr parent, sdf::Element
+ 
+   // Create the controller manager
+   RCLCPP_INFO(impl_->model_nh_->get_logger(), "Loading controller_manager");
++  // Pass robot_description directly via NodeOptions to avoid the
++  // rcl argv length / special-char limit on large URDFs.
++  rclcpp::NodeOptions cm_options;
++  cm_options.automatically_declare_parameters_from_overrides(true);
++  cm_options.append_parameter_override("robot_description", urdf_string);
+   impl_->controller_manager_.reset(
+     new controller_manager::ControllerManager(
+       std::move(resource_manager_),
+       impl_->executor_,
+       "controller_manager",
+-      impl_->model_nh_->get_namespace()));
++      impl_->model_nh_->get_namespace(),
++      cm_options));
+   impl_->executor_->add_node(impl_->controller_manager_);
+ 
+   if (!impl_->controller_manager_->has_parameter("update_rate")) {

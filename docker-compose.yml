@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  pepper_gui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pepper_with_gazebo:humble
+    platform: linux/amd64
+    container_name: pepper_sim
+    init: true
+    ports:
+      - "6080:6080"
+      - "5901:5901"
+    environment:
+      - ROS_DOMAIN_ID=0
+    stdin_open: true
+    tty: true
+    command: gui
+
+  pepper_headless:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pepper_with_gazebo:humble
+    platform: linux/amd64
+    container_name: pepper_sim_headless
+    init: true
+    environment:
+      - ROS_DOMAIN_ID=0
+    stdin_open: true
+    tty: true
+    command: headless
+
+  pepper_shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pepper_with_gazebo:humble
+    platform: linux/amd64
+    container_name: pepper_shell
+    init: true
+    environment:
+      - ROS_DOMAIN_ID=0
+    stdin_open: true
+    tty: true
+    command: bash

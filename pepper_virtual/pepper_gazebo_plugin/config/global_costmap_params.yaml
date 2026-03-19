@@ -1,0 +1,32 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+
+  update_frequency: 10.0
+  publish_frequency: 10.0
+  transform_tolerance: 0.5
+
+  static_map: true
+
+  plugins:
+   - {name: static_layer, type: "costmap_2d::StaticLayer"}
+   - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+   - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+#     - {name: social_layer, type: "social_navigation_layers::ProxemicLayer"}
+#     - {name: passing_layer, type: "social_navigation_layers::PassingLayer"}
+
+# social_layer:
+#   enabled: false
+#   cutoff: 10.0
+#   amplitude: 77.0
+#   covariance: 0.25
+#   factor: 5.0
+#   keep_time: 0.75
+
+# passing_layer:
+#   enabled: false
+#   cutoff: 10.0
+#   amplitude: 77.0
+#   covariance: 0.25
+#   factor: 5.0
+#   keep_time: 0.75

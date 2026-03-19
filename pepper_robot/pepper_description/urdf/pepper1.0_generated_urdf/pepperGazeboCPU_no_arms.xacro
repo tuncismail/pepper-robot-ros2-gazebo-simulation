@@ -1,0 +1,557 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Gazebo-specific configuration for the no-arms variant -->
+	<xacro:property name="PI" value="3.14159265359" />
+
+    <!-- GAZEBO ROS2 CONTROL -->
+
+    <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <parameters>$(find pepper_control)/config/pepper_ros2_controllers.yaml</parameters>
+            <ros>
+                <namespace>/</namespace>
+            </ros>
+        </plugin>
+    </gazebo>
+    <!-- END OF GAZEBO ROS2 CONTROL PLUGIN -->
+
+    <!-- ros2_control hardware interface block -->
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="HeadYaw">
+            <command_interface name="position"/>
+            <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="HeadPitch">
+            <command_interface name="position"/>
+            <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="HipRoll">
+            <command_interface name="position"/>
+            <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="HipPitch">
+            <command_interface name="position"/>
+            <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="KneePitch">
+            <command_interface name="position"/>
+            <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
+
+    <!-- GAZEBO MATERIALS -->
+
+    <gazebo reference="base_footprint">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="base_link">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="torso">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="Neck">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="Head">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="gaze">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="Hip">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="Pelvis">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="Tibia">
+        <mu1>0.0</mu1>
+        <mu2>0.0</mu2>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="1 0 0"/>
+        <selfCollide>false</selfCollide>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="WheelFL_link">
+        <mu1>1</mu1>
+        <mu2>0</mu2>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="1 0 0"/>
+        <minDepth>0.003</minDepth>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="WheelB_link">
+        <mu1>0.5</mu1>
+        <mu2>0.5</mu2>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="1 0 0"/>
+        <minDepth>0.003</minDepth>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="WheelFR_link">
+        <mu1>0</mu1>
+        <mu2>1</mu2>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="0 1 0"/>
+        <minDepth>0.003</minDepth>
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+<!--
+    RGB CAMERAS:
+-->
+    <gazebo reference="CameraTop_frame">
+      <sensor type="camera" name="CameraTop">
+        <update_rate>5.0</update_rate>
+        <camera name="camera_top">
+            <horizontal_fov>1.0</horizontal_fov>
+            <image>
+                <width>640</width>
+                <height>480</height>
+                <format>R8G8B8</format>
+            </image>
+            <clip>
+                <near>0.3</near>
+                <far>500</far>
+            </clip>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.007</stddev>
+            </noise>
+        </camera>
+        <plugin name="camera_top_controller" filename="libgazebo_ros_camera.so">
+            <ros>
+                <node_name>camera_top</node_name>
+            </ros>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>5.0</updateRate>
+            <cameraName>/pepper/camera/front</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>CameraTop_optical_frame</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>-0.0545211</distortionK1>
+            <distortionK2>0.06919734</distortionK2>
+            <distortionK3>-0.0241095</distortionK3>
+            <distortionT1>-0.0112245</distortionT1>
+            <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="CameraBottom_frame">
+      <sensor type="camera" name="CameraBottom">
+        <update_rate>5.0</update_rate>
+        <camera name="camera_bottom">
+            <horizontal_fov>1.0</horizontal_fov>
+            <image>
+                <width>640</width>
+                <height>480</height>
+                <format>R8G8B8</format>
+            </image>
+            <clip>
+                <near>0.05</near>
+                <far>500</far>
+            </clip>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.007</stddev>
+            </noise>
+        </camera>
+        <plugin name="camera_bottom_controller" filename="libgazebo_ros_camera.so">
+            <ros>
+                <node_name>camera_bottom</node_name>
+            </ros>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>5.0</updateRate>
+            <cameraName>/pepper/camera/bottom</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>CameraBottom_optical_frame</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>-0.0648764</distortionK1>
+            <distortionK2>0.06125202</distortionK2>
+            <distortionK3>0.00382815</distortionK3>
+            <distortionT1>-0.00551104</distortionT1>
+            <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="CameraDepth_frame">
+      <sensor type="depth" name="CameraDepth_frame_sensor">
+        <always_on>true</always_on>
+        <update_rate>30.0</update_rate>
+        <camera>
+          <horizontal_fov>${58.0*3.14159265359/180.0}</horizontal_fov>
+          <image>
+            <format>B8G8R8</format>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.4</near>
+            <far>8.0</far>
+          </clip>
+        </camera>
+        <plugin name="CameraDepth_frame_controller" filename="libgazebo_ros_camera.so">
+          <ros>
+            <node_name>camera_depth</node_name>
+          </ros>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>30.0</updateRate>
+          <cameraName>pepper/camera/depth</cameraName>
+          <imageTopicName>ir/image_raw</imageTopicName>
+          <cameraInfoTopicName>depth/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <pointCloudTopicName>depth/points</pointCloudTopicName>
+          <frameName>CameraDepth_optical_frame</frameName>
+          <pointCloudCutoff>0.4</pointCloudCutoff>
+          <pointCloudCutoffMax>8.0</pointCloudCutoffMax>
+          <distortionK1>0.0015006388343578579</distortionK1>
+          <distortionK2>-0.0391088434247705</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.002366597891470404</distortionT1>
+          <distortionT2>0.004792417377891919</distortionT2>
+          <CxPrime>0.0</CxPrime>
+          <Cx>166.86986665284704</Cx>
+          <Cy>126.63268197434216</Cy>
+          <focalLength>288.647970</focalLength>
+          <hackBaseline>0.0</hackBaseline>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+<!--
+    Sonars
+-->
+
+<gazebo reference="SonarBack_frame">
+  <sensor type="ray" name="SonarBack">
+    <pose>0 0 0 0 0 0</pose>
+    <update_rate>20</update_rate>
+    <visualize>false</visualize>
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>5</samples>
+          <resolution>3</resolution>
+          <min_angle>-0.52</min_angle>
+          <max_angle>0.52</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>5</samples>
+          <resolution>3</resolution>
+          <min_angle>-0.52</min_angle>
+          <max_angle>0.52</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.0</min>
+        <max>5.0</max>
+        <resolution>3</resolution>
+      </range>
+    </ray>
+    <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
+      <ros>
+        <namespace>/pepper</namespace>
+      </ros>
+      <gaussianNoise>0.05</gaussianNoise>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>20</updateRate>
+      <topicName>sonar_back</topicName>
+      <frameName>SonarBack_frame</frameName>
+      <minRange>0.0</minRange>
+      <maxRange>5.0</maxRange>
+      <fov>1.05</fov>
+      <radiation>ultrasound</radiation>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<gazebo reference="SonarFront_frame">
+  <sensor type="ray" name="SonarFront">
+    <pose>0 0 0 0 0 0</pose>
+    <update_rate>20</update_rate>
+    <visualize>false</visualize>
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>5</samples>
+          <resolution>3</resolution>
+          <min_angle>-0.52</min_angle>
+          <max_angle>0.52</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>5</samples>
+          <resolution>3</resolution>
+          <min_angle>-0.52</min_angle>
+          <max_angle>0.52</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.0</min>
+        <max>5.0</max>
+        <resolution>3</resolution>
+      </range>
+    </ray>
+    <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
+      <ros>
+        <namespace>/pepper</namespace>
+      </ros>
+      <gaussianNoise>0.05</gaussianNoise>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>20</updateRate>
+      <topicName>sonar_front</topicName>
+      <frameName>SonarFront_frame</frameName>
+      <minRange>0.0</minRange>
+      <maxRange>5.0</maxRange>
+      <fov>1.05</fov>
+      <radiation>ultrasound</radiation>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Joint state publisher -->
+<gazebo>
+  <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+    <ros>
+      <remapping>~/out:=/joint_states</remapping>
+    </ros>
+    <update_rate>50</update_rate>
+    <joint_name>HeadYaw</joint_name>
+    <joint_name>HeadPitch</joint_name>
+    <joint_name>HipRoll</joint_name>
+    <joint_name>HipPitch</joint_name>
+    <joint_name>KneePitch</joint_name>
+    <!-- Wheels -->
+    <joint_name>WheelFL</joint_name>
+    <joint_name>WheelFR</joint_name>
+    <joint_name>WheelB</joint_name>
+  </plugin>
+</gazebo>
+
+<!-- Drive controller (custom velocity plugin — kept as-is) -->
+<gazebo>
+  <plugin name="base_drive_controller" filename="libgazebo_ros_model_velocity.so">
+      <ros>
+        <namespace>/pepper</namespace>
+      </ros>
+      <robotNamespace>/pepper</robotNamespace>
+      <commandTopic>/pepper/cmd_vel</commandTopic>
+      <outputVelocityTopic>/pepper/output_vel</outputVelocityTopic>
+      <updateRate>50.0</updateRate>
+      <commandTimeout>0.5</commandTimeout>
+      <!-- Publish odometry as needed -->
+      <odometryTopic>/pepper/odom_plugin</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>20.0</odometryRate>
+      <publishOdometryTf>true</publishOdometryTf>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <!-- As measured in real robot odom_alpha3 and odom_alpha1 -->
+      <gaussianNoiseXY>0.02</gaussianNoiseXY>
+      <gaussianNoiseYaw>0.02645</gaussianNoiseYaw>
+
+      <!-- To simulate closer to the real robot we modified the
+      theoretical limits -->
+      <linearVelocityLimit>${0.55 * 1.0}</linearVelocityLimit>
+      <angularVelocityLimit>${2.0 * 1.0}</angularVelocityLimit>
+      <linearAccelerationLimit>${0.55 * 0.8}</linearAccelerationLimit>
+      <angularAccelerationLimit>${3.0 * 0.8}</angularAccelerationLimit>
+      <linearJerkLimit>${5.0 * 0.9}</linearJerkLimit>
+      <angularJerkLimit>${50.0 * 0.9}</angularJerkLimit>
+  </plugin>
+</gazebo>
+
+<gazebo>
+  <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+    <frameName>world</frameName>
+    <bodyName>base_footprint</bodyName>
+    <topicName>/pepper/odom_groundtruth</topicName>
+    <updateRate>20.0</updateRate>
+  </plugin>
+</gazebo>
+
+  <!-- Front -->
+  <gazebo reference="SurroundingFrontLaser_frame">
+    <sensor type="ray" name="front_laser_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>6.25</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>60</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5235987755982988</min_angle>
+            <max_angle>0.5235987755982988</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>7.0</max>
+          <resolution>0.005</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.01</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_front_laser_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=/pepper/scan_front</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>SurroundingFrontLaser_frame</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+    <!-- Left -->
+  <gazebo reference="SurroundingLeftLaser_frame">
+    <sensor type="ray" name="left_laser_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>6.25</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>60</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5235987755982988</min_angle>
+            <max_angle>0.5235987755982988</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>7.0</max>
+          <resolution>0.005</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.01</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_left_laser_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=/pepper/scan_left</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>SurroundingLeftLaser_frame</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+    <!-- Right -->
+  <gazebo reference="SurroundingRightLaser_frame">
+    <sensor type="ray" name="right_laser_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>6.25</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>60</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5235987755982988</min_angle>
+            <max_angle>0.5235987755982988</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>7.0</max>
+          <resolution>0.005</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.01</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_right_laser_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=/pepper/scan_right</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>SurroundingRightLaser_frame</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+  <!-- Front fake hokuyo -->
+  <gazebo reference="SurroundingFrontLaser_fake_hokuyo_frame">
+    <sensor type="ray" name="fake_hokuyo_laser_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>6.25</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_fake_hokuyo_laser_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=/pepper/hokuyo_scan</remapping>
+        </ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>SurroundingFrontLaser_fake_hokuyo_frame</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>pepper_robot</name>
+  <version>1.0.0</version>
+  <description>Pepper robot metapackage for ROS 2</description>
+  <maintainer email="tuncismail@users.noreply.github.com">Ismail Tunc</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>pepper_description</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

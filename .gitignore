@@ -1,0 +1,37 @@
+# Catkin / Colcon build artifacts
+build/
+devel/
+install/
+log/
+*.pyc
+__pycache__/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CTestConfiguration.ini
+CTestCustom.cmake
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/
+
+# Docker
+docker-compose.override.yml
+
+# ROS bags
+*.bag
+*.db3
+
+# Gazebo
+*.log

@@ -1,0 +1,37 @@
+local_costmap:
+  global_frame: odom
+  robot_base_frame: base_footprint
+
+  update_frequency: 10.0
+  publish_frequency: 10.0
+  transform_tolerance: 0.5  
+
+  static_map: false  
+  rolling_window: true
+  width: 3
+  height: 3
+  resolution: 0.05
+
+  plugins:
+    - {name: static_layer, type: "costmap_2d::StaticLayer"}
+    - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+    - {name: social_layer, type: "social_navigation_layers::ProxemicLayer"}
+  #     - {name: passing_layer, type: "social_navigation_layers::PassingLayer"}
+
+  social_layer:
+    enabled: true
+    cutoff: 10.0
+    amplitude: 77.0
+    covariance: 0.25
+    factor: 5.0
+    keep_time: 0.75
+    people_topic: /validated_people_measurements
+
+  # passing_layer:
+  #   enabled: false
+  #   cutoff: 10.0
+  #   amplitude: 77.0
+  #   covariance: 0.25
+  #   factor: 5.0
+  #   keep_time: 0.75
