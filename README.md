@@ -419,3 +419,4 @@ This project builds on and extends the following upstream work:
 
 - Project code: see [LICENSE](LICENSE)
 - Pepper meshes (`pepper_meshes/`): [CC-BY-NC-ND 4.0](pepper_meshes/debian_license/) — Aldebaran Robotics / SoftBank Robotics
+
